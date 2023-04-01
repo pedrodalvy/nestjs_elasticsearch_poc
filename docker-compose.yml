@@ -1,0 +1,48 @@
+version: '3.8'
+
+volumes:
+  es8-data:
+    name: es8-data
+
+networks:
+  app_local:
+    name: "app_local"
+
+services:
+  app:
+    container_name: app
+    command: sh -c "/usr/wait-for-it.sh -t 30 es8:9200 -- npm run start:debug"
+    build:
+      context: .
+    ports:
+      - '${PORT:-3000}:3000'
+      - '${DEBUG_PORT:-9229}:9229'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - app_local
+
+  setup-app:
+    container_name: setup-app
+    command: sh -c "/usr/wait-for-it.sh -t 30 es8:9200 -- npm run setup"
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - app_local
+
+  es8:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.0
+    container_name: es8
+    ports:
+      - "${ES8_PORT:-9200}:9200"
+    environment:
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xms512m -Xmx2g"
+    volumes:
+      - es8-data:/usr/share/elasticsearch/data
+    networks:
+      - app_local
