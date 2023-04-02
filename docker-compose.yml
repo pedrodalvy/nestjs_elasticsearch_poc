@@ -42,6 +42,7 @@ services:
     environment:
       discovery.type: "single-node"
       ES_JAVA_OPTS: "-Xms512m -Xmx2g"
+      "xpack.security.enabled": false
     volumes:
       - es8-data:/usr/share/elasticsearch/data
     networks:
