@@ -11,15 +11,13 @@ export class UsersElasticsearchImporter {
 
   async run(): Promise<void> {
     const databaseUsersFileHeaders = ['id', 'name', 'userName'];
+    const assetsPath = `${process.cwd()}/assets`;
 
-    const highPriorityIDs = this._getPriorityIDsFrom(process.cwd() + '/assets/lista_relevancia_1.txt');
-    const mediumPriorityIDs = this._getPriorityIDsFrom(process.cwd() + '/assets/lista_relevancia_2.txt');
-
+    const highPriorityIDs = this._getPriorityIDsFrom(`${assetsPath}/lista_relevancia_1.txt`);
+    const mediumPriorityIDs = this._getPriorityIDsFrom(`${assetsPath}/lista_relevancia_2.txt`);
     const usersPriorityMap = this._generatePriorityMap(highPriorityIDs, mediumPriorityIDs);
 
-    const usersDatasource = fs
-      .createReadStream(process.cwd() + '/assets/database.csv')
-      .pipe(csvParser(databaseUsersFileHeaders));
+    const usersDatasource = fs.createReadStream(`${assetsPath}/database.csv`).pipe(csvParser(databaseUsersFileHeaders));
 
     await this.elasticsearchService.helpers.bulk({
       datasource: usersDatasource,
