@@ -10,7 +10,7 @@ export class UsersElasticsearchImporter {
   constructor(private readonly elasticsearchService: ElasticsearchService) {}
 
   async run(): Promise<void> {
-    const databaseUsersFileHeaders = ['id', 'name', 'userName'];
+    const databaseUsersFileHeaders = ['id', 'name', 'username'];
     const assetsPath = `${process.cwd()}/assets`;
 
     const highPriorityIDs = this._getPriorityIDsFrom(`${assetsPath}/lista_relevancia_1.txt`);
@@ -33,7 +33,7 @@ export class UsersElasticsearchImporter {
     return new Set(fileContent.split('\n'));
   }
 
-  private _generatePriorityMap(mediumPriorityIDs: Set<string>, highPriorityIDs: Set<string>): Map<string, number> {
+  private _generatePriorityMap(highPriorityIDs: Set<string>, mediumPriorityIDs: Set<string>): Map<string, number> {
     const priorityMap = new Map();
 
     mediumPriorityIDs.forEach((id) => priorityMap.set(id, UsersPriorityEnum.MEDIUM));

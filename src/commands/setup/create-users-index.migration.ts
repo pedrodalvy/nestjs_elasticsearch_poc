@@ -11,7 +11,7 @@ export class CreateUsersIndexMigration {
     const properties: Record<PropertyName, MappingProperty> = {
       id: { type: 'keyword' },
       name: { type: 'text' },
-      userName: { type: 'keyword' },
+      username: { type: 'keyword' },
       priority: { type: 'integer' },
     };
 
