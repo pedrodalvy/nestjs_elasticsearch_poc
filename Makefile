@@ -5,7 +5,7 @@ setup:
 .PHONY: setup
 
 run:
-	docker compose up -d
+	docker compose up -d es8 app
 .PHONY: run
 
 down:
